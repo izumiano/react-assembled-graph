@@ -1,12 +1,20 @@
-import "./barChart.css";
 import GraphManager from "@izumiano/assembled-graph";
 import BarChart from "@izumiano/assembled-graph/graphTypes/barChart";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 
-export default function BarChartNode() {
+export function BarChartNode({
+	width,
+	height,
+}: {
+	width: string;
+	height: string;
+}) {
 	return (
-		<div className="canvasContainer">
+		<div
+			className="assembled-graph-canvas-container"
+			style={{ width, height, overflow: "hidden" }}
+		>
 			<canvas ref={useGraph()} />
 		</div>
 	);

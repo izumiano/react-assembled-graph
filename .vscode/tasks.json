@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"label": "Start Dev",
-			"dependsOn": ["npm: typecheck", "npm: dev"],
+			"dependsOn": ["npm: typecheck", "npm: build"],
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -16,11 +16,10 @@
 		},
 		{
 			"type": "npm",
-			"script": "dev",
-			"dependsOn": "Copy Wasm",
+			"script": "build",
 			"problemMatcher": [],
-			"label": "npm: dev",
-			"detail": "start vite",
+			"label": "npm: build",
+			"detail": "build",
 			"group": {
 				"kind": "build",
 				"isDefault": false
@@ -35,30 +34,6 @@
 			"detail": "typecheck project",
 			"group": {
 				"kind": "test",
-				"isDefault": false
-			}
-		},
-		{
-			"type": "shell",
-			"label": "Copy Wasm",
-			"windows": {
-				"command": "copy node_modules\\@izumiano\\assembled-graph\\graph-renderer\\pkg\\graph_renderer_bg.wasm node_modules\\.vite\\deps"
-			},
-			"linux": {
-				"command": "cp -rf node_modules/@izumiano/assembled-graph/graph-renderer/pkg/graph_renderer_bg.wasm node_modules/.vite/deps/"
-			},
-			"osx": {
-				"command": "cp -rf node_modules/@izumiano/assembled-graph/graph-renderer/pkg/graph_renderer_bg.wasm node_modules/.vite/deps/"
-			}
-		},
-		{
-			"type": "npm",
-			"script": "preview",
-			"problemMatcher": [],
-			"label": "npm: preview",
-			"detail": "preview vite",
-			"group": {
-				"kind": "build",
 				"isDefault": false
 			}
 		},

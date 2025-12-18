@@ -17,6 +17,7 @@
 		{
 			"type": "npm",
 			"script": "dev",
+			"dependsOn": "Copy Wasm",
 			"problemMatcher": [],
 			"label": "npm: dev",
 			"detail": "start vite",
@@ -35,6 +36,19 @@
 			"group": {
 				"kind": "test",
 				"isDefault": false
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Copy Wasm",
+			"windows": {
+				"command": "copy node_modules\\@izumiano\\assembled-graph\\graph-renderer\\pkg\\graph_renderer_bg.wasm node_modules\\.vite\\deps"
+			},
+			"linux": {
+				"command": "cp -rf node_modules/@izumiano/assembled-graph/graph-renderer/pkg/graph_renderer_bg.wasm node_modules/.vite/deps/"
+			},
+			"osx": {
+				"command": "cp -rf node_modules/@izumiano/assembled-graph/graph-renderer/pkg/graph_renderer_bg.wasm node_modules/.vite/deps/"
 			}
 		},
 		{

@@ -1,8 +1,8 @@
 {
-	"name": "react-assembled-graph",
-	"private": true,
-	"version": "0.0.0",
-	"main": "./dist/index.umd.cjs",
+	"name": "@izumiano/react-assembled-graph",
+	"version": "0.0.6",
+	"description": "react binding for assembled-graph",
+	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
@@ -16,9 +16,16 @@
 		"dist"
 	],
 	"type": "module",
+	"keywords": [],
+	"author": "izumiano",
+	"license": "ISC",
+	"publishConfig": {
+		"@izumiano:registry": "https://npm.pkg.github.com"
+	},
 	"scripts": {
 		"typecheck": "tsc --watch --noEmit -p tsconfig.typecheck.json",
 		"build": "tsc -b && vite build",
+		"test": "exit 0",
 		"lint": "biome check",
 		"biomeFix": "biome check --write"
 	},

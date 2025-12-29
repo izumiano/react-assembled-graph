@@ -1,6 +1,6 @@
 {
 	"name": "@izumiano/react-assembled-graph",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "react binding for assembled-graph",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
@@ -30,7 +30,7 @@
 		"biomeFix": "biome check --write"
 	},
 	"dependencies": {
-		"@izumiano/assembled-graph": "^0.0.6",
+		"@izumiano/assembled-graph": "^0.0.7",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
 	},
@@ -44,7 +44,6 @@
 		"globals": "^16.5.0",
 		"typescript": "~5.9.3",
 		"vite": "^7.2.4",
-		"vite-plugin-dts": "^4.5.4",
-		"vite-plugin-wasm": "^3.5.0"
+		"vite-plugin-dts": "^4.5.4"
 	}
 }

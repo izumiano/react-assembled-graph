@@ -1,26 +1,31 @@
-import GraphManager from "@izumiano/assembled-graph";
-import BarChart from "@izumiano/assembled-graph/graphTypes/barChart";
+import {
+	BarChart,
+	type BarChartOptions,
+	GraphManager,
+} from "@izumiano/assembled-graph";
 
 import { type RefObject, useEffect, useRef } from "react";
 
 export function BarChartNode({
 	width,
 	height,
+	options,
 }: {
 	width: string;
 	height: string;
+	options?: BarChartOptions;
 }) {
 	return (
 		<div
 			className="assembled-graph-canvas-container"
 			style={{ width, height, overflow: "hidden" }}
 		>
-			<canvas ref={useGraph()} />
+			<canvas ref={useGraph(options)} />
 		</div>
 	);
 }
 
-function useGraph<T extends HTMLCanvasElement>() {
+function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 	const canvas = useRef<T>(null);
 	const graphManagerRef = useRef<GraphManager>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
@@ -30,7 +35,13 @@ function useGraph<T extends HTMLCanvasElement>() {
 		const parentElem = currCanvas?.parentElement;
 
 		if (currCanvas && parentElem) {
-			initGraph(currCanvas, parentElem, graphManagerRef, resizeObserverRef);
+			initGraph(
+				currCanvas,
+				parentElem,
+				graphManagerRef,
+				resizeObserverRef,
+				options,
+			);
 		}
 
 		return () => {
@@ -50,6 +61,7 @@ function initGraph(
 	parentElem: HTMLElement,
 	graphManagerRef: RefObject<GraphManager | null>,
 	resizeObserverRef: RefObject<ResizeObserver | null>,
+	options?: BarChartOptions,
 ) {
 	canvas.width = parentElem.clientWidth;
 	canvas.height = parentElem.clientHeight;
@@ -71,17 +83,7 @@ function initGraph(
 				{ title: "⭐⭐⭐⭐", value: 13 },
 				{ title: "⭐⭐⭐⭐⭐", value: 18 },
 			],
-			{
-				backgroundColor: { r: 10, g: 5, b: 40 },
-				gap: 10,
-				titleFontSize: 15,
-				barCornerRadius: 20,
-				valueAxis: { width: 40, minPixelDistance: 35 },
-				positioning: { bottom: 30, top: 20, left: 10, right: 10 },
-				minWidth: 5,
-				minHeight: 7,
-				hoverScale: 1.1,
-			},
+			options ?? {},
 			// (info) => {
 			// 	if (!info) {
 			// 		graphInfoElem.classList.add("hidden");

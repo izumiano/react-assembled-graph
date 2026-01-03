@@ -1,0 +1,26 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "firefox",
+			"request": "launch",
+			"reAttach": true,
+			"name": "Start Dev",
+			"url": "http://localhost:5173",
+			"webRoot": "${workspaceFolder}",
+			"preLaunchTask": "Start Dev"
+		},
+		{
+			"type": "firefox",
+			"request": "attach",
+			"name": "Attach"
+		},
+		{
+			"type": "firefox",
+			"request": "launch",
+			"reAttach": true,
+			"name": "Launch add-on",
+			"addonPath": "${workspaceFolder}"
+		}
+	]
+}

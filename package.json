@@ -23,7 +23,8 @@
 		"@izumiano:registry": "https://npm.pkg.github.com"
 	},
 	"scripts": {
-		"typecheck": "tsc --watch --noEmit -p tsconfig.typecheck.json",
+		"dev:run": "vite --host",
+		"dev:typecheck": "tsc --watch --noEmit -p tsconfig.typecheck.json",
 		"build": "tsc -b && vite build",
 		"test": "exit 0",
 		"lint": "biome check",

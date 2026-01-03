@@ -16,6 +16,9 @@
 		"dist"
 	],
 	"type": "module",
+	"imports": {
+		"#assembledGraph": "./src/devExports.ts"
+	},
 	"keywords": [],
 	"author": "izumiano",
 	"license": "ISC",

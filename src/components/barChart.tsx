@@ -1,10 +1,9 @@
+import { type RefObject, useEffect, useRef } from "react";
 import {
 	BarChart,
 	type BarChartOptions,
 	type GraphManager,
-} from "@izumiano/assembled-graph";
-
-import { type RefObject, useEffect, useRef } from "react";
+} from "#assembledGraph";
 import { useGraphContext } from "./graphContext";
 
 export function BarChartNode({

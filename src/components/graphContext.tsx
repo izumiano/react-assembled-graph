@@ -1,4 +1,3 @@
-import { GraphManager } from "@izumiano/assembled-graph";
 import {
 	createContext,
 	type ReactNode,
@@ -7,6 +6,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { GraphManager } from "#assembledGraph";
 
 export const GraphContextProvider = createContext<GraphManager | null>(null);
 

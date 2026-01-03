@@ -9,5 +9,14 @@ export default defineConfig({
 		resolve: {
 			alias: {"#assembledGraph": "@izumiano/assembled-graph"}
 		},
+		build:{
+			rollupOptions:{
+				output: {
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name]-[hash].js`,
+        assetFileNames: `[name]-[hash].[extname]`,
+      },
+			}
+		}
 	}
 );

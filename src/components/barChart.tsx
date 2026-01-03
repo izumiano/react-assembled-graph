@@ -3,16 +3,19 @@ import {
 	BarChart,
 	type BarChartOptions,
 	type GraphManager,
+	type BarChartData,
 } from "#assembledGraph";
 import { useGraphContext } from "./graphContext";
 
 export function BarChartNode({
 	width,
 	height,
+	data,
 	options,
 }: {
 	width: string;
 	height: string;
+	data: BarChartData;
 	options?: BarChartOptions;
 }) {
 	return (
@@ -20,12 +23,15 @@ export function BarChartNode({
 			className="assembled-graph-canvas-container"
 			style={{ width, height, overflow: "hidden" }}
 		>
-			<canvas ref={useGraph(options)} />
+			<canvas ref={useGraph(data, options)} />
 		</div>
 	);
 }
 
-function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
+function useGraph<T extends HTMLCanvasElement>(
+	data: BarChartData,
+	options?: BarChartOptions,
+) {
 	const canvas = useRef<T>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
 
@@ -33,7 +39,12 @@ function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 
 	const graphManager = useGraphContext();
 
+	const dataRef = useRef(data);
 	const optionsRef = useRef(options);
+
+	useEffect(() => {
+		graphRenderer.current?.updateData(data, graphManager.getTimestamp());
+	}, [data, graphManager]);
 
 	useEffect(() => {
 		const currCanvas = canvas.current;
@@ -46,6 +57,7 @@ function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 				graphManager,
 				graphRenderer,
 				resizeObserverRef,
+				dataRef.current,
 				optionsRef.current,
 			);
 		}
@@ -69,6 +81,7 @@ function initGraph(
 	graphManager: GraphManager,
 	graphRendererRef: RefObject<BarChart | null>,
 	resizeObserverRef: RefObject<ResizeObserver | null>,
+	data: BarChartData,
 	options?: BarChartOptions,
 ) {
 	canvas.width = parentElem.clientWidth;
@@ -76,18 +89,7 @@ function initGraph(
 
 	const graph = new BarChart(
 		canvas,
-		[
-			{ title: "⭐", value: 50 },
-			{ title: "⭐⭐", value: 30 },
-			{ title: "⭐⭐⭐", value: 3 },
-			{ title: "⭐⭐⭐⭐", value: 0 },
-			{ title: "⭐⭐⭐⭐⭐", value: 18 },
-			{ title: "⭐", value: 80 },
-			{ title: "⭐⭐", value: 0 },
-			{ title: "⭐⭐⭐", value: 40 },
-			{ title: "⭐⭐⭐⭐", value: 13 },
-			{ title: "⭐⭐⭐⭐⭐", value: 18 },
-		],
+		data,
 		options ?? {},
 		// (info) => {
 		// 	if (!info) {

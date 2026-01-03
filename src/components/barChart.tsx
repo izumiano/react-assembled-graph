@@ -34,6 +34,8 @@ function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 
 	const graphManager = useGraphContext();
 
+	const optionsRef = useRef(options);
+
 	useEffect(() => {
 		const currCanvas = canvas.current;
 		const parentElem = currCanvas?.parentElement;
@@ -45,7 +47,7 @@ function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 				graphManager,
 				graphRenderer,
 				resizeObserverRef,
-				options,
+				optionsRef.current,
 			);
 		}
 
@@ -57,7 +59,7 @@ function useGraph<T extends HTMLCanvasElement>(options?: BarChartOptions) {
 			resizeObserverRef.current?.disconnect();
 			resizeObserverRef.current = null;
 		};
-	});
+	}, [graphManager]);
 
 	return canvas;
 }

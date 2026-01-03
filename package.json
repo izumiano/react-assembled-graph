@@ -1,6 +1,6 @@
 {
 	"name": "@izumiano/react-assembled-graph",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "react binding for assembled-graph",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",

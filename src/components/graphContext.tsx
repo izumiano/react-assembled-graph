@@ -4,6 +4,7 @@ import {
 	type ReactNode,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 
@@ -23,13 +24,22 @@ export function useGraphContext() {
 
 export default function GraphContext({ children }: { children: ReactNode }) {
 	const [graphManager, setGraphManager] = useState<GraphManager | null>(null);
+	const createManagerAbortController = useRef(new AbortController());
 
 	useEffect(() => {
+		let graphManager: GraphManager | null = null;
 		(async () => {
-			setGraphManager(await GraphManager.create());
+			graphManager = await GraphManager.create(
+				createManagerAbortController.current.signal,
+			);
+			setGraphManager(graphManager);
 		})();
 
-		// TODO: clean up graph manager
+		return () => {
+			createManagerAbortController.current.abort();
+			createManagerAbortController.current = new AbortController();
+			graphManager?.dispose();
+		};
 	}, []);
 
 	return (

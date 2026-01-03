@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig({
 		plugins: [react(), biomePlugin()],
-		base: "/",
+		base: "/react-assembled-graph/",
 		resolve: {
 			alias: {"#assembledGraph": "@izumiano/assembled-graph"}
 		},

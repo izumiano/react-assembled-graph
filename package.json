@@ -28,7 +28,9 @@
 	"scripts": {
 		"dev:run": "vite --host",
 		"dev:typecheck": "tsc --watch --noEmit -p tsconfig.typecheck.json",
+		"preview": "npm run build:example && vite preview --host",
 		"build": "tsc -b && vite build",
+		"build:example": "vite build -c vite.example.js",
 		"test": "exit 0",
 		"lint": "biome check",
 		"biomeFix": "biome check --write"

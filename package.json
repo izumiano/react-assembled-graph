@@ -35,8 +35,8 @@
 		"lint": "biome check",
 		"biomeFix": "biome check --write"
 	},
-	"dependencies": {
-		"@izumiano/assembled-graph": "^0.0.10",
+	"peerDependencies": {
+		"@izumiano/assembled-graph": "^0.0.11",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
 	},

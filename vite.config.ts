@@ -7,7 +7,11 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig(() => {
 	return {
-		plugins: [react(), biomePlugin(), dts({insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json"})],
+		plugins: [
+			react(), 
+			biomePlugin(), 
+			dts({insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json", exclude: ["example", "src/assembledGraphImport.ts"]}),
+		],
 		base: "/",
 		build: {
 			lib: {
@@ -16,11 +20,11 @@ export default defineConfig(() => {
 				fileName: "index"
 			},
 			rollupOptions: {
-				external: ["react", "react-dom"],
+				external: ["react", "react-dom", "@izumiano/assembled-graph"],
 				output:{
-					globals: {"react": "React", "react-dom": "ReactDOM"}
+					globals: {"react": "React", "react-dom": "ReactDOM", "@izumiano/assembled-graph": "react-assembledGraph"}
 				}
 			}
-		}
+		},
 	}
 });

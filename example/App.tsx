@@ -1,10 +1,15 @@
+import type { OnSelectionChangeArgs } from "#assembledGraph";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 function App() {
 	const [bars, setBars] = useState<{ index: number; values: number[] }[]>([]);
 	const [contextActive, setContextActive] = useState(true);
+
+	const onSelectionChange = useCallback((info: OnSelectionChangeArgs) => {
+		console.debug(info?.data);
+	}, []);
 
 	return (
 		<>
@@ -83,6 +88,7 @@ function App() {
 									positioning: 20,
 									touchPreventScroll: false,
 								}}
+								onSelectionChange={onSelectionChange}
 							/>
 						))}
 					</GraphContext>

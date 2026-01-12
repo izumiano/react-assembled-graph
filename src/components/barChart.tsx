@@ -4,6 +4,7 @@ import {
 	type BarChartData,
 	type BarChartOptions,
 	type GraphManager,
+	type OnSelectionChange,
 } from "#assembledGraph";
 import { useGraphContext } from "./graphContext";
 
@@ -15,12 +16,14 @@ export function BarChartNode({
 	style,
 	data,
 	options,
+	onSelectionChange,
 }: {
 	width?: string;
 	height?: string;
 	style: CSSProperties;
 	data: BarChartData;
 	options?: BarChartOptions & ReactBarChartOptions;
+	onSelectionChange?: OnSelectionChange;
 }) {
 	const touchAction = options?.touchPreventScroll ? "none" : "unset";
 
@@ -38,7 +41,7 @@ export function BarChartNode({
 				msTouchAction: touchAction,
 			}}
 		>
-			<canvas ref={useGraph(data, options)} />
+			<canvas ref={useGraph(data, options, onSelectionChange)} />
 		</div>
 	);
 }
@@ -46,6 +49,7 @@ export function BarChartNode({
 function useGraph<T extends HTMLCanvasElement>(
 	data: BarChartData,
 	options?: BarChartOptions,
+	onSelectionChange?: OnSelectionChange,
 ) {
 	const canvas = useRef<T>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
@@ -74,6 +78,7 @@ function useGraph<T extends HTMLCanvasElement>(
 				resizeObserverRef,
 				dataRef.current,
 				optionsRef.current,
+				onSelectionChange,
 			);
 		}
 
@@ -85,7 +90,7 @@ function useGraph<T extends HTMLCanvasElement>(
 			resizeObserverRef.current?.disconnect();
 			resizeObserverRef.current = null;
 		};
-	}, [graphManager]);
+	}, [graphManager, onSelectionChange]);
 
 	return canvas;
 }
@@ -98,13 +103,12 @@ function initGraph(
 	resizeObserverRef: RefObject<ResizeObserver | null>,
 	data: BarChartData,
 	options?: BarChartOptions,
+	onSelectionChange?: OnSelectionChange,
 ) {
 	canvas.width = parentElem.clientWidth;
 	canvas.height = parentElem.clientHeight;
 
-	const graph = new BarChart(canvas, data, options ?? {}, (info) => {
-		console.log(info);
-	});
+	const graph = new BarChart(canvas, data, options ?? {}, onSelectionChange);
 	graphRendererRef.current = graph;
 	graphManager.addGraph(graph);
 

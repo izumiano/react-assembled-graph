@@ -17,7 +17,7 @@
 	],
 	"type": "module",
 	"imports": {
-		"#assembledGraph": "./src/devExports.ts"
+		"#assembledGraph": "./src/assembledGraphImport.ts"
 	},
 	"keywords": [],
 	"author": "izumiano",

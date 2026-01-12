@@ -6,9 +6,6 @@ import { defineConfig } from "vite";
 export default defineConfig({
 		plugins: [react(), biomePlugin()],
 		base: "/react-assembled-graph/",
-		resolve: {
-			alias: {"#assembledGraph": "@izumiano/assembled-graph"}
-		},
 		build:{
 			rollupOptions:{
 				output: {

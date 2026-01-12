@@ -2,27 +2,13 @@ import { biomePlugin } from "@pbr1111/vite-plugin-biome";
 import dts from 'vite-plugin-dts';
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import { defineConfig, loadEnv } from "vite";
-import path from "path";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
-export default defineConfig(({command}) => {
-	const aliases = {"#assembledGraph": "@izumiano/assembled-graph"};
-
-	if(command === "serve"){
-		const env = loadEnv("development", process.cwd(), "VITE_");
-		const assembledGraphPath = env.VITE_ASSEMBLED_GRAPH_PATH;
-		if(assembledGraphPath){
-			aliases["#assembledGraph"] = path.resolve(__dirname, assembledGraphPath);
-		}
-	}
-
+export default defineConfig(() => {
 	return {
 		plugins: [react(), biomePlugin(), dts({insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json"})],
 		base: "/",
-		resolve: {
-			alias: aliases
-		},
 		build: {
 			lib: {
 				entry: resolve(__dirname, "src/index.ts"),

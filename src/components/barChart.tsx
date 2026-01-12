@@ -1,9 +1,9 @@
 import { type RefObject, useEffect, useRef } from "react";
 import {
 	BarChart,
+	type BarChartData,
 	type BarChartOptions,
 	type GraphManager,
-	type BarChartData,
 } from "#assembledGraph";
 import { useGraphContext } from "./graphContext";
 

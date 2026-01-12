@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useRef } from "react";
+import { type CSSProperties, type RefObject, useEffect, useRef } from "react";
 import {
 	BarChart,
 	type BarChartData,
@@ -7,21 +7,36 @@ import {
 } from "#assembledGraph";
 import { useGraphContext } from "./graphContext";
 
+type ReactBarChartOptions = { touchPreventScroll?: boolean };
+
 export function BarChartNode({
 	width,
 	height,
+	style,
 	data,
 	options,
 }: {
-	width: string;
-	height: string;
+	width?: string;
+	height?: string;
+	style: CSSProperties;
 	data: BarChartData;
-	options?: BarChartOptions;
+	options?: BarChartOptions & ReactBarChartOptions;
 }) {
+	const touchAction = options?.touchPreventScroll ? "none" : "unset";
+
 	return (
 		<div
 			className="assembled-graph-canvas-container"
-			style={{ width, height, overflow: "hidden" }}
+			style={{
+				...style,
+				width,
+				height,
+				overflow: "hidden",
+				userSelect: "none",
+				WebkitUserSelect: "none",
+				touchAction,
+				msTouchAction: touchAction,
+			}}
 		>
 			<canvas ref={useGraph(data, options)} />
 		</div>
@@ -87,27 +102,9 @@ function initGraph(
 	canvas.width = parentElem.clientWidth;
 	canvas.height = parentElem.clientHeight;
 
-	const graph = new BarChart(
-		canvas,
-		data,
-		options ?? {},
-		// (info) => {
-		// 	if (!info) {
-		// 		graphInfoElem.classList.add("hidden");
-		// 		return;
-		// 	}
-		// 	graphInfoElem.classList.remove("hidden");
-		// 	const { data, positionInfo } = info;
-		// 	graphInfoElem.innerText = data.title + data.value;
-		// 	const rect = graphInfoElem.getBoundingClientRect();
-		// 	let left = positionInfo.x - rect.width;
-		// 	if (left < 0) {
-		// 		left = positionInfo.x + positionInfo.width;
-		// 	}
-		// 	graphInfoElem.style.left = `${left}px`;
-		// 	graphInfoElem.style.top = `${positionInfo.y}px`;
-		// },
-	);
+	const graph = new BarChart(canvas, data, options ?? {}, (info) => {
+		console.log(info);
+	});
 	graphRendererRef.current = graph;
 	graphManager.addGraph(graph);
 

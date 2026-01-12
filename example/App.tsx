@@ -60,22 +60,28 @@ function App() {
 						{bars.map((bar) => (
 							<BarChartNode
 								key={bar.index}
-								width="calc(100vw - 64px)"
-								height="calc(50vh - 64px)"
+								height="20rem"
+								style={{ margin: "2rem" }}
 								data={[
 									{ title: "⭐", value: bar.values[0] },
-									{ title: "⭐⭐", value: bar.values[1] },
-									{ title: "⭐⭐⭐", value: bar.values[2] },
-									{ title: "⭐⭐⭐⭐", value: bar.values[3] },
+									{ title: "⭐⭐", displayTitle: "", value: bar.values[1] },
+									{ title: "⭐⭐⭐", displayTitle: "", value: bar.values[2] },
+									{ title: "⭐⭐⭐⭐", displayTitle: "", value: bar.values[3] },
 									{ title: "⭐⭐⭐⭐⭐", value: bar.values[4] },
 								]}
 								options={{
-									backgroundColor: { r: 170, g: 100, b: 120, a: 255 },
-									gap: 10,
+									backgroundColor: { r: 80, g: 80, b: 175, a: 255 },
+									barOptions: {
+										gap: 25,
+										minWidth: 10,
+										minHeight: 5,
+										hoverColor: { r: 255, g: 100, b: 100, a: 80 },
+										selectedColor: { r: 150, g: 255, b: 150 },
+									},
 									titleFontSize: 20,
 									valueAxis: { width: 40 },
 									positioning: 20,
-									minWidth: 10,
+									touchPreventScroll: false,
 								}}
 							/>
 						))}

@@ -5,6 +5,8 @@
 			"type": "firefox",
 			"request": "launch",
 			"reAttach": true,
+			"keepProfileChanges": true,
+			"profile": "default",
 			"name": "Start Dev",
 			"url": "http://localhost:5173",
 			"webRoot": "${workspaceFolder}",
@@ -13,6 +15,7 @@
 		{
 			"type": "firefox",
 			"request": "attach",
+			"host": "localhost",
 			"name": "Attach"
 		},
 		{

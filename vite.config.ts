@@ -10,7 +10,7 @@ export default defineConfig(() => {
 		plugins: [
 			react(), 
 			biomePlugin(), 
-			dts({insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json", exclude: ["example", "src/assembledGraphImport.ts"]}),
+			dts({insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json", exclude: ["example"]}),
 		],
 		base: "/",
 		build: {

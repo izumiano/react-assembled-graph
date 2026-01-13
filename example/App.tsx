@@ -1,4 +1,4 @@
-import type { OnSelectionChangeArgs } from "#assembledGraph";
+import type { OnSelectionChangeArgs } from "../src/assembledGraphImport";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
 import { useCallback, useState } from "react";

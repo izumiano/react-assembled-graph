@@ -5,7 +5,7 @@ import {
 	type BarChartOptions,
 	type GraphManager,
 	type OnSelectionChange,
-} from "#assembledGraph";
+} from "../assembledGraphImport";
 import { useGraphContext } from "./graphContext";
 
 type ReactBarChartOptions = { touchPreventScroll?: boolean };

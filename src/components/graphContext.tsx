@@ -6,7 +6,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { GraphManager } from "#assembledGraph";
+import { GraphManager } from "../assembledGraphImport";
 
 export const GraphContextProvider = createContext<GraphManager | null>(null);
 

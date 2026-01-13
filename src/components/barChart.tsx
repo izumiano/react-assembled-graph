@@ -20,7 +20,7 @@ export function BarChartNode({
 }: {
 	width?: string;
 	height?: string;
-	style: CSSProperties;
+	style?: CSSProperties;
 	data: BarChartData;
 	options?: BarChartOptions & ReactBarChartOptions;
 	onSelectionChange?: OnSelectionChange;

@@ -1,4 +1,7 @@
-import type { OnSelectionChangeArgs } from "../src/assembledGraphImport";
+import {
+	__assembledGraphLogger__,
+	type OnSelectionChangeArgs,
+} from "../src/assembledGraphImport";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
 import { useCallback, useState } from "react";
@@ -13,6 +16,11 @@ function App() {
 
 	return (
 		<>
+			{import.meta.env.DEV && (
+				<button type="button" onClick={__assembledGraphLogger__.sendLogs}>
+					Send Logs
+				</button>
+			)}
 			<button
 				type="button"
 				onClick={() => {
@@ -71,7 +79,11 @@ function App() {
 									{ title: "⭐", value: bar.values[0] },
 									{ title: "⭐⭐", displayTitle: "", value: bar.values[1] },
 									{ title: "⭐⭐⭐", displayTitle: "", value: bar.values[2] },
-									{ title: "⭐⭐⭐⭐", displayTitle: "", value: bar.values[3] },
+									{
+										title: "⭐⭐⭐⭐",
+										displayTitle: "",
+										value: bar.values[3],
+									},
 									{ title: "⭐⭐⭐⭐⭐", value: bar.values[4] },
 								]}
 								options={{

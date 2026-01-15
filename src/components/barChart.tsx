@@ -105,10 +105,14 @@ function initGraph(
 	options?: BarChartOptions,
 	onSelectionChange?: OnSelectionChange,
 ) {
-	canvas.width = parentElem.clientWidth;
-	canvas.height = parentElem.clientHeight;
-
-	const graph = new BarChart(canvas, data, options ?? {}, onSelectionChange);
+	const graph = new BarChart(
+		canvas,
+		parentElem.clientWidth,
+		parentElem.clientHeight,
+		data,
+		options ?? {},
+		onSelectionChange,
+	);
 	graphRendererRef.current = graph;
 	graphManager.addGraph(graph);
 

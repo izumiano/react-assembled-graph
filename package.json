@@ -1,6 +1,6 @@
 {
 	"name": "@izumiano/react-assembled-graph",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "react binding for assembled-graph",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
@@ -30,9 +30,9 @@
 		"biomeFix": "biome check --write"
 	},
 	"peerDependencies": {
-		"@izumiano/assembled-graph": "^0.1.0",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0"
+		"@izumiano/assembled-graph": "^0.1.1",
+		"react": "^19.2.3",
+		"react-dom": "^19.2.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10",

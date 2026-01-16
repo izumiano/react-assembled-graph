@@ -1,18 +1,35 @@
 import {
 	__assembledGraphLogger__,
-	type OnSelectionChangeArgs,
+	type OnHoverArgs,
 } from "../src/assembledGraphImport";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
-import { useCallback, useState } from "react";
+import { useRef, useState } from "react";
+
+function generateBars(randomizeCount: boolean) {
+	const count = randomizeCount ? Math.floor(Math.random() * 15 + 1.5) : 5;
+
+	const bars = [];
+	for (let i = 0; i < count; i++) {
+		bars.push(Math.floor(Math.random() * 100 + 0.5));
+	}
+	return bars;
+}
 
 function App() {
-	const [bars, setBars] = useState<{ index: number; values: number[] }[]>([]);
+	const [barCharts, setBars] = useState<{ index: number; values: number[] }[]>(
+		[],
+	);
 	const [contextActive, setContextActive] = useState(true);
+	const [randomizeBarCount, setRandomizeBarCount] = useState(true);
 
-	const onSelectionChange = useCallback((info: OnSelectionChangeArgs) => {
-		console.debug(info?.data);
-	}, []);
+	const callbacks = useRef({
+		onHover: {
+			func: (info: OnHoverArgs) => {
+				console.debug(info?.data.title);
+			},
+		},
+	});
 
 	return (
 		<>
@@ -37,13 +54,7 @@ function App() {
 							setBars((prev) => [
 								{
 									index: prev.length,
-									values: [
-										Math.random() * 100,
-										Math.random() * 100,
-										Math.random() * 100,
-										Math.random() * 100,
-										Math.random() * 100,
-									],
+									values: generateBars(randomizeBarCount),
 								},
 								...prev,
 							]);
@@ -54,38 +65,40 @@ function App() {
 					<button
 						type="button"
 						onClick={() => {
-							const newBars = [...bars];
+							const newBars = [...barCharts];
 							newBars.forEach((bar) => {
-								bar.values = [
-									Math.random() * 100,
-									Math.random() * 100,
-									Math.random() * 100,
-									Math.random() * 100,
-									Math.random() * 100,
-								];
+								bar.values = generateBars(randomizeBarCount);
 							});
 							setBars(newBars);
 						}}
 					>
 						Randomize
 					</button>
+					<label>
+						<input
+							type="checkbox"
+							checked={randomizeBarCount}
+							onChange={(e) => {
+								setRandomizeBarCount(e.target.checked);
+							}}
+						></input>
+						Randomize Count
+					</label>
 					<GraphContext>
-						{bars.map((bar) => (
+						{barCharts.map((bars) => (
 							<BarChartNode
-								key={bar.index}
+								key={bars.index}
 								height="20rem"
 								style={{ margin: "2rem" }}
-								data={[
-									{ title: "⭐", value: bar.values[0] },
-									{ title: "⭐⭐", displayTitle: "", value: bar.values[1] },
-									{ title: "⭐⭐⭐", displayTitle: "", value: bar.values[2] },
-									{
-										title: "⭐⭐⭐⭐",
-										displayTitle: "",
-										value: bar.values[3],
-									},
-									{ title: "⭐⭐⭐⭐⭐", value: bar.values[4] },
-								]}
+								data={bars.values.map((bar, index) => {
+									let title = "";
+									if (index === 0) {
+										title = "⭐";
+									} else if (index === bars.values.length - 1) {
+										title = "⭐⭐⭐⭐⭐";
+									}
+									return { title, value: bar };
+								})}
 								options={{
 									backgroundColor: { r: 80, g: 80, b: 175, a: 255 },
 									barOptions: {
@@ -100,7 +113,7 @@ function App() {
 									positioning: 20,
 									touchPreventScroll: false,
 								}}
-								onSelectionChange={onSelectionChange}
+								callbacks={callbacks.current}
 							/>
 						))}
 					</GraphContext>

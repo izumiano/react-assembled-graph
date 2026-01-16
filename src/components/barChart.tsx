@@ -1,10 +1,10 @@
 import { type CSSProperties, type RefObject, useEffect, useRef } from "react";
 import {
 	BarChart,
+	type BarChartCallbacks,
 	type BarChartData,
 	type BarChartOptions,
 	type GraphManager,
-	type OnSelectionChange,
 } from "../assembledGraphImport";
 import { useGraphContext } from "./graphContext";
 
@@ -16,14 +16,14 @@ export function BarChartNode({
 	style,
 	data,
 	options,
-	onSelectionChange,
+	callbacks,
 }: {
 	width?: string;
 	height?: string;
 	style?: CSSProperties;
 	data: BarChartData;
 	options?: BarChartOptions & ReactBarChartOptions;
-	onSelectionChange?: OnSelectionChange;
+	callbacks?: BarChartCallbacks;
 }) {
 	const touchAction = options?.touchPreventScroll ? "none" : "unset";
 
@@ -41,7 +41,7 @@ export function BarChartNode({
 				msTouchAction: touchAction,
 			}}
 		>
-			<canvas ref={useGraph(data, options, onSelectionChange)} />
+			<canvas ref={useGraph(data, options, callbacks)} />
 		</div>
 	);
 }
@@ -49,7 +49,7 @@ export function BarChartNode({
 function useGraph<T extends HTMLCanvasElement>(
 	data: BarChartData,
 	options?: BarChartOptions,
-	onSelectionChange?: OnSelectionChange,
+	callbacks?: BarChartCallbacks,
 ) {
 	const canvas = useRef<T>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
@@ -78,7 +78,7 @@ function useGraph<T extends HTMLCanvasElement>(
 				resizeObserverRef,
 				dataRef.current,
 				optionsRef.current,
-				onSelectionChange,
+				callbacks,
 			);
 		}
 
@@ -90,7 +90,7 @@ function useGraph<T extends HTMLCanvasElement>(
 			resizeObserverRef.current?.disconnect();
 			resizeObserverRef.current = null;
 		};
-	}, [graphManager, onSelectionChange]);
+	}, [graphManager, callbacks]);
 
 	return canvas;
 }
@@ -103,7 +103,7 @@ function initGraph(
 	resizeObserverRef: RefObject<ResizeObserver | null>,
 	data: BarChartData,
 	options?: BarChartOptions,
-	onSelectionChange?: OnSelectionChange,
+	callbacks?: BarChartCallbacks,
 ) {
 	const graph = new BarChart(
 		canvas,
@@ -111,7 +111,7 @@ function initGraph(
 		parentElem.clientHeight,
 		data,
 		options ?? {},
-		onSelectionChange,
+		callbacks,
 	);
 	graphRendererRef.current = graph;
 	graphManager.addGraph(graph);

@@ -125,7 +125,7 @@ function initGraph(
 
 			graph.resize(width, height);
 			graph.update(graphManager.getTimestamp() ?? 0);
-			graph.render();
+			graph.render(graphManager.getTimestamp() ?? 0);
 		}
 	});
 	resizeObserverRef.current.observe(parentElem);

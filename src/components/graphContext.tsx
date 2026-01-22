@@ -32,7 +32,7 @@ export default function GraphContext({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		(async () => {
 			while (createManagerAbortController.current.signal.aborted) {
-				__assembledGraphLogger__.logVerbose(
+				__assembledGraphLogger__.trace(
 					"waiting for previous GraphManager.create call",
 				);
 				await new Promise((resolve) => {

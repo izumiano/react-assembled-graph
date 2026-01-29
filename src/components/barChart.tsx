@@ -16,20 +16,20 @@ export function BarChartNode({
 	style,
 	data,
 	options,
-	callbacks,
+	onSelectionChange,
+	onHover,
 }: {
 	width?: string;
 	height?: string;
 	style?: CSSProperties;
 	data: BarChartData;
 	options?: BarChartOptions & ReactBarChartOptions;
-	callbacks?: BarChartCallbacks;
-}) {
+} & Omit<BarChartCallbacks, "onTitleLayout" | "onValueAxisLayout">) {
 	const touchAction = options?.touchPreventScroll ? "none" : "unset";
 
 	return (
 		<div
-			className="assembled-graph-canvas-container"
+			className="assembled-graph__canvas-container"
 			style={{
 				...style,
 				width,
@@ -41,16 +41,19 @@ export function BarChartNode({
 				msTouchAction: touchAction,
 			}}
 		>
-			<canvas ref={useGraph(data, options, callbacks)} />
+			<canvas ref={useGraph({ data, options, onSelectionChange, onHover })} />
 		</div>
 	);
 }
 
-function useGraph<T extends HTMLCanvasElement>(
-	data: BarChartData,
-	options?: BarChartOptions,
-	callbacks?: BarChartCallbacks,
-) {
+function useGraph<T extends HTMLCanvasElement>({
+	data,
+	options,
+	onSelectionChange,
+	onHover,
+	onTitleLayout,
+	onValueAxisLayout,
+}: { data: BarChartData; options?: BarChartOptions } & BarChartCallbacks) {
 	const canvas = useRef<T>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
 
@@ -60,6 +63,8 @@ function useGraph<T extends HTMLCanvasElement>(
 
 	const dataRef = useRef(data);
 	const optionsRef = useRef(options);
+
+	// TODO: update options in assembledGraph when 'options' value changes
 
 	useEffect(() => {
 		graphRenderer.current?.updateData(data, graphManager.getTimestamp());
@@ -78,7 +83,7 @@ function useGraph<T extends HTMLCanvasElement>(
 				resizeObserverRef,
 				dataRef.current,
 				optionsRef.current,
-				callbacks,
+				{ onSelectionChange, onHover, onTitleLayout, onValueAxisLayout },
 			);
 		}
 
@@ -90,7 +95,13 @@ function useGraph<T extends HTMLCanvasElement>(
 			resizeObserverRef.current?.disconnect();
 			resizeObserverRef.current = null;
 		};
-	}, [graphManager, callbacks]);
+	}, [
+		graphManager,
+		onHover,
+		onSelectionChange,
+		onTitleLayout,
+		onValueAxisLayout,
+	]);
 
 	return canvas;
 }
@@ -102,16 +113,26 @@ function initGraph(
 	graphRendererRef: RefObject<BarChart | null>,
 	resizeObserverRef: RefObject<ResizeObserver | null>,
 	data: BarChartData,
-	options?: BarChartOptions,
-	callbacks?: BarChartCallbacks,
+	options: BarChartOptions | undefined,
+	{
+		onSelectionChange,
+		onHover,
+		onTitleLayout,
+		onValueAxisLayout,
+	}: BarChartCallbacks,
 ) {
 	const graph = new BarChart(
 		canvas,
 		parentElem.clientWidth,
 		parentElem.clientHeight,
 		data,
-		options ?? {},
-		callbacks,
+		{
+			options: options ?? {},
+			onSelectionChange,
+			onHover,
+			onTitleLayout,
+			onValueAxisLayout,
+		},
 	);
 	graphRendererRef.current = graph;
 	graphManager.addGraph(graph);

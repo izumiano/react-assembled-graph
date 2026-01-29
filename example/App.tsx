@@ -1,6 +1,6 @@
 import {
 	__assembledGraphLogger__,
-	type OnHoverArgs,
+	type BarChart_OnHoverArgs,
 } from "../src/assembledGraphImport";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
@@ -17,17 +17,15 @@ function generateBars(randomizeCount: boolean) {
 }
 
 function App() {
-	const [barCharts, setBars] = useState<{ index: number; values: number[] }[]>(
-		[],
-	);
+	const [barCharts, setBars] = useState<{ index: number; values: number[] }[]>([
+		{ index: 0, values: [1, 4, 6, 7] },
+	]);
 	const [contextActive, setContextActive] = useState(true);
 	const [randomizeBarCount, setRandomizeBarCount] = useState(true);
 
-	const callbacks = useRef({
-		onHover: {
-			func: (info: OnHoverArgs) => {
-				console.debug(info?.data.title);
-			},
+	const onHover = useRef({
+		func: (info: BarChart_OnHoverArgs) => {
+			console.debug(info?.data.title);
 		},
 	});
 
@@ -108,12 +106,11 @@ function App() {
 										hoverColor: { r: 255, g: 100, b: 100, a: 80 },
 										selectedColor: { r: 150, g: 255, b: 150 },
 									},
-									titleFontSize: 20,
 									valueAxis: { width: 40 },
 									positioning: 20,
 									touchPreventScroll: false,
 								}}
-								callbacks={callbacks.current}
+								onHover={onHover.current}
 							/>
 						))}
 					</GraphContext>

@@ -4,7 +4,8 @@ import {
 } from "../src/assembledGraphImport";
 import { BarChartNode, GraphContext } from "../src/index";
 import "./App.css";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
+import { FilledStar } from "./filledStar";
 
 function generateBars(randomizeCount: boolean) {
 	const count = randomizeCount ? Math.floor(Math.random() * 15 + 1.5) : 5;
@@ -24,7 +25,7 @@ function App() {
 	const [randomizeBarCount, setRandomizeBarCount] = useState(true);
 
 	const onHover = useRef({
-		func: (info: BarChart_OnHoverArgs) => {
+		func: (info: BarChart_OnHoverArgs<ReactNode>) => {
 			console.debug(info?.data.title);
 		},
 	});
@@ -89,11 +90,19 @@ function App() {
 								height="20rem"
 								style={{ margin: "2rem" }}
 								data={bars.values.map((bar, index) => {
-									let title = "";
+									let title: ReactNode;
 									if (index === 0) {
-										title = "⭐";
+										title = <FilledStar />;
 									} else if (index === bars.values.length - 1) {
-										title = "⭐⭐⭐⭐⭐";
+										title = (
+											<>
+												<FilledStar />
+												<FilledStar />
+												<FilledStar />
+												<FilledStar />
+												<FilledStar />
+											</>
+										);
 									}
 									return { title, value: bar };
 								})}
@@ -107,7 +116,7 @@ function App() {
 										selectedColor: { r: 150, g: 255, b: 150 },
 									},
 									valueAxis: { width: 40 },
-									positioning: 20,
+									positioning: 25,
 									touchPreventScroll: false,
 								}}
 								onHover={onHover.current}

@@ -28,6 +28,7 @@ export function useGraphContext() {
 export default function GraphContext({ children }: { children: ReactNode }) {
 	const [graphManager, setGraphManager] = useState<GraphManager | null>(null);
 	const createManagerAbortController = useRef(new AbortController());
+	const abortControllerActive = useRef(false);
 
 	useEffect(() => {
 		(async () => {
@@ -40,15 +41,19 @@ export default function GraphContext({ children }: { children: ReactNode }) {
 				});
 			}
 
+			abortControllerActive.current = true;
 			setGraphManager(
 				await GraphManager.create(createManagerAbortController.current.signal),
 			);
+			abortControllerActive.current = false;
 
 			createManagerAbortController.current = new AbortController();
 		})();
 
 		return () => {
-			createManagerAbortController.current.abort();
+			if (abortControllerActive.current) {
+				createManagerAbortController.current.abort();
+			}
 		};
 	}, []);
 

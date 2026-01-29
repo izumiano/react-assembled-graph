@@ -1,14 +1,36 @@
-import { type CSSProperties, type RefObject, useEffect, useRef } from "react";
+import {
+	type CSSProperties,
+	type ReactNode,
+	type RefObject,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import {
 	BarChart,
-	type BarChartCallbacks,
+	type OnValueAxisLayoutParams,
+	type BarChartCallbacks as InternalBarChartCallbacks,
 	type BarChartData,
-	type BarChartOptions,
+	type BarChartOptions as InternalBarChartOptions,
 	type GraphManager,
-} from "../assembledGraphImport";
-import { useGraphContext } from "./graphContext";
+	type OnTitleLayoutParams,
+	type BarChart_OnSelectionChangeArgs as InternalBarChart_OnSelectionChangeArgs,
+} from "../../assembledGraphImport";
+import { useGraphContext } from "../graphContext";
+import ValueAxis from "../valueAxis";
+import TitlesOverlay from "../titlesOverlay";
 
 type ReactBarChartOptions = { touchPreventScroll?: boolean };
+
+export type BarChartCallbacks = Omit<
+	InternalBarChartCallbacks<ReactNode>,
+	"onTitleLayout" | "onValueAxisLayout"
+>;
+
+export type BarChart_OnSelectionChangeArgs =
+	InternalBarChart_OnSelectionChangeArgs<ReactNode>;
+
+export type BarChartOptions = InternalBarChartOptions & ReactBarChartOptions;
 
 export function BarChartNode({
 	width,
@@ -22,10 +44,24 @@ export function BarChartNode({
 	width?: string;
 	height?: string;
 	style?: CSSProperties;
-	data: BarChartData;
-	options?: BarChartOptions & ReactBarChartOptions;
-} & Omit<BarChartCallbacks, "onTitleLayout" | "onValueAxisLayout">) {
+	data: { title: ReactNode; displayTitle?: ReactNode; value: number }[];
+	options?: BarChartOptions;
+} & BarChartCallbacks) {
 	const touchAction = options?.touchPreventScroll ? "none" : "unset";
+
+	const [valueAxisLayout, setValueAxisLayout] =
+		useState<OnValueAxisLayoutParams>([]);
+
+	const [titlesLayout, setTitlesLayout] = useState<
+		OnTitleLayoutParams<ReactNode>
+	>([]);
+
+	const internalData = data.map((data) => {
+		return {
+			title: data.displayTitle === undefined ? data.title : data.displayTitle,
+			value: data.value,
+		};
+	});
 
 	return (
 		<div
@@ -39,9 +75,21 @@ export function BarChartNode({
 				WebkitUserSelect: "none",
 				touchAction,
 				msTouchAction: touchAction,
+				position: "relative",
 			}}
 		>
-			<canvas ref={useGraph({ data, options, onSelectionChange, onHover })} />
+			<canvas
+				ref={useGraph({
+					data: internalData,
+					options,
+					onSelectionChange,
+					onHover,
+					onValueAxisLayout: setValueAxisLayout,
+					onTitleLayout: setTitlesLayout,
+				})}
+			/>
+			<ValueAxis layout={valueAxisLayout} />
+			<TitlesOverlay layout={titlesLayout} />
 		</div>
 	);
 }
@@ -53,11 +101,14 @@ function useGraph<T extends HTMLCanvasElement>({
 	onHover,
 	onTitleLayout,
 	onValueAxisLayout,
-}: { data: BarChartData; options?: BarChartOptions } & BarChartCallbacks) {
+}: {
+	data: BarChartData<ReactNode>;
+	options?: InternalBarChartOptions;
+} & InternalBarChartCallbacks<ReactNode>) {
 	const canvas = useRef<T>(null);
 	const resizeObserverRef = useRef<ResizeObserver>(null);
 
-	const graphRenderer = useRef<BarChart>(null);
+	const graphRenderer = useRef<BarChart<ReactNode>>(null);
 
 	const graphManager = useGraphContext();
 
@@ -110,16 +161,16 @@ function initGraph(
 	canvas: HTMLCanvasElement,
 	parentElem: HTMLElement,
 	graphManager: GraphManager,
-	graphRendererRef: RefObject<BarChart | null>,
+	graphRendererRef: RefObject<BarChart<ReactNode> | null>,
 	resizeObserverRef: RefObject<ResizeObserver | null>,
-	data: BarChartData,
-	options: BarChartOptions | undefined,
+	data: BarChartData<ReactNode>,
+	options: InternalBarChartOptions | undefined,
 	{
 		onSelectionChange,
 		onHover,
 		onTitleLayout,
 		onValueAxisLayout,
-	}: BarChartCallbacks,
+	}: InternalBarChartCallbacks<ReactNode>,
 ) {
 	const graph = new BarChart(
 		canvas,

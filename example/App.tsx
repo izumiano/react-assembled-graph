@@ -26,7 +26,7 @@ function App() {
 
 	const onHover = useRef({
 		func: (info: BarChart_OnHoverArgs<ReactNode>) => {
-			console.debug(info?.data.title);
+			console.debug(info?.data.label);
 		},
 	});
 
@@ -90,11 +90,11 @@ function App() {
 								height="20rem"
 								style={{ margin: "2rem" }}
 								data={bars.values.map((bar, index) => {
-									let title: ReactNode;
+									let label: ReactNode;
 									if (index === 0) {
-										title = <FilledStar />;
+										label = <FilledStar />;
 									} else if (index === bars.values.length - 1) {
-										title = (
+										label = (
 											<>
 												<FilledStar />
 												<FilledStar />
@@ -104,7 +104,7 @@ function App() {
 											</>
 										);
 									}
-									return { title, value: bar };
+									return { label, value: bar };
 								})}
 								options={{
 									backgroundColor: { r: 80, g: 80, b: 175, a: 255 },

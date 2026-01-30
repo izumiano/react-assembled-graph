@@ -5,7 +5,7 @@ export default function TitlesOverlay({
 	layout,
 }: {
 	layout: {
-		title: ReactNode;
+		label: ReactNode;
 		x: number;
 		y: number;
 		width: number;
@@ -34,7 +34,7 @@ export default function TitlesOverlay({
 			layout={layout.map((item) => {
 				return {
 					...item,
-					node: item.title,
+					node: item.label,
 				};
 			})}
 			className="assembled-graph__titles-container"

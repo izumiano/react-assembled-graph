@@ -13,7 +13,7 @@ import {
 	type BarChartData,
 	type BarChartOptions as InternalBarChartOptions,
 	type GraphManager,
-	type OnTitleLayoutParams,
+	type OnLabelsLayoutParams,
 	type BarChart_OnSelectionChangeArgs as InternalBarChart_OnSelectionChangeArgs,
 } from "../../assembledGraphImport";
 import { useGraphContext } from "../graphContext";
@@ -44,7 +44,7 @@ export function BarChartNode({
 	width?: string;
 	height?: string;
 	style?: CSSProperties;
-	data: { title: ReactNode; displayTitle?: ReactNode; value: number }[];
+	data: { label: ReactNode; displayLabel?: ReactNode; value: number }[];
 	options?: BarChartOptions;
 } & BarChartCallbacks) {
 	const touchAction = options?.touchPreventScroll ? "none" : "unset";
@@ -52,13 +52,13 @@ export function BarChartNode({
 	const [valueAxisLayout, setValueAxisLayout] =
 		useState<OnValueAxisLayoutParams>([]);
 
-	const [titlesLayout, setTitlesLayout] = useState<
-		OnTitleLayoutParams<ReactNode>
+	const [labelsLayout, setLabelsLayout] = useState<
+		OnLabelsLayoutParams<ReactNode>
 	>([]);
 
 	const internalData = data.map((data) => {
 		return {
-			title: data.displayTitle === undefined ? data.title : data.displayTitle,
+			label: data.displayLabel === undefined ? data.label : data.displayLabel,
 			value: data.value,
 		};
 	});
@@ -85,11 +85,11 @@ export function BarChartNode({
 					onSelectionChange,
 					onHover,
 					onValueAxisLayout: setValueAxisLayout,
-					onTitleLayout: setTitlesLayout,
+					onLabelsLayout: setLabelsLayout,
 				})}
 			/>
 			<ValueAxis layout={valueAxisLayout} />
-			<TitlesOverlay layout={titlesLayout} />
+			<TitlesOverlay layout={labelsLayout} />
 		</div>
 	);
 }
@@ -99,7 +99,7 @@ function useGraph<T extends HTMLCanvasElement>({
 	options,
 	onSelectionChange,
 	onHover,
-	onTitleLayout,
+	onLabelsLayout,
 	onValueAxisLayout,
 }: {
 	data: BarChartData<ReactNode>;
@@ -134,7 +134,7 @@ function useGraph<T extends HTMLCanvasElement>({
 				resizeObserverRef,
 				dataRef.current,
 				optionsRef.current,
-				{ onSelectionChange, onHover, onTitleLayout, onValueAxisLayout },
+				{ onSelectionChange, onHover, onLabelsLayout, onValueAxisLayout },
 			);
 		}
 
@@ -150,7 +150,7 @@ function useGraph<T extends HTMLCanvasElement>({
 		graphManager,
 		onHover,
 		onSelectionChange,
-		onTitleLayout,
+		onLabelsLayout,
 		onValueAxisLayout,
 	]);
 
@@ -168,7 +168,7 @@ function initGraph(
 	{
 		onSelectionChange,
 		onHover,
-		onTitleLayout,
+		onLabelsLayout,
 		onValueAxisLayout,
 	}: InternalBarChartCallbacks<ReactNode>,
 ) {
@@ -181,7 +181,7 @@ function initGraph(
 			options: options ?? {},
 			onSelectionChange,
 			onHover,
-			onTitleLayout,
+			onLabelsLayout,
 			onValueAxisLayout,
 		},
 	);

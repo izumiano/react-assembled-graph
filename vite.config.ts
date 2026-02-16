@@ -22,7 +22,7 @@ export default defineConfig(() => {
 			rollupOptions: {
 				external: ["react", "react-dom", "@izumiano/assembled-graph"],
 				output:{
-					globals: {"react": "React", "react-dom": "ReactDOM", "@izumiano/assembled-graph": "react-assembledGraph"}
+					globals: {"react": "React", "react-dom": "ReactDOM", "@izumiano/assembled-graph": "assembledGraph"}
 				}
 			}
 		},

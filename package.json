@@ -47,6 +47,6 @@
 		"vite-plugin-dts": "^4.5.4"
 	},
 	"dependencies": {
-		"@izumiano/assembled-graph": "^0.1.3"
+		"@izumiano/assembled-graph": "^0.1.4"
 	}
 }
